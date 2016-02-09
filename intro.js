@@ -1438,6 +1438,8 @@
     var referenceLayer = document.createElement('div');
 
     tooltipLayer.className = 'introjs-tooltip';
+    
+   
 
     tooltipLayer.onclick = function (e) {
       //IE9 & Other Browsers
@@ -1458,7 +1460,28 @@
     var closeButton = document.createElement('a');
     closeButton.className = 'introjs-button';
     closeButton.innerHTML = this._options.hintButtonLabel;
+    
+    closeButton.onclick = console.log("button closed, stepid: " + stepId);
+    closeButton.onclick = hintClickDropCookie(stepId);
     closeButton.onclick = _hideHint.bind(this, stepId);
+    
+    function hintClickDropCookie(step_Id) {
+      
+      var cookiePrefix = "webitecookiename_";
+      cookiePrefix = cookiePrefix + step_Id;
+      function setCookie(c_name,value,exdays){
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + exdays);
+        var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+        document.cookie=c_name + step_Id + "=" + c_value;
+        
+      }
+    
+      setCookie(cookiePrefix, "1",90);
+    
+    }
+    
+    
 
     tooltipTextLayer.appendChild(tooltipWrapper);
     tooltipTextLayer.appendChild(closeButton);
@@ -1478,6 +1501,7 @@
 
     referenceLayer.appendChild(tooltipLayer);
     document.body.appendChild(referenceLayer);
+     
 
     //set proper position
     _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
